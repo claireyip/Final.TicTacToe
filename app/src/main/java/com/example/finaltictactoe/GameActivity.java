@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity {
     private Button[][] buttons = new Button[3][3];
@@ -17,14 +19,14 @@ public class GameActivity extends AppCompatActivity {
 
     private boolean player1Turn = true;
 
-    private int player1Points;
-    private int player2Points;
+    private int player1Scores = 0;
+    private int player2Scores = 0;
 
     private TextView player1;
     private TextView player2;
 
     private int defaultColor = Color.parseColor("#C6C5C2");
-    private int player1Color = Color.parseColor("#0DEBE4" );
+    private int player1Color = Color.parseColor("#0DEBE4");
     private int player2Color = Color.parseColor("#EE9B2A");
 
     @Override
@@ -58,7 +60,7 @@ public class GameActivity extends AppCompatActivity {
                         buttonClicked(view);
                     }
                 });
-               /**
+                /**
                  * setting color of button to default
                  */
                 buttons[i][j].setBackgroundColor(defaultColor);
@@ -68,7 +70,10 @@ public class GameActivity extends AppCompatActivity {
                 buttonState[i][j] = 0;
             }
         }
+
     }
+
+
     private void buttonClicked (View view) {
         int b = ((Button) view).getId();
         int x = 0;
@@ -106,8 +111,16 @@ public class GameActivity extends AppCompatActivity {
             player1Turn = true;
         }
         if(chechForWin() == 1) {
+            player1Scores++;
+            Toast toast = Toast.makeText(this, "Congratulations! Player 1 wins!",
+                    Toast.LENGTH_LONG);
+            toast.show();
             // player 1 wins and reset
         } else if (chechForWin() == 2) {
+            player2Scores++;
+            Toast toast = Toast.makeText(this, "Congratulations! Player 2 wins!",
+                    Toast.LENGTH_LONG);
+            toast.show();
             //player 2 win and reset
         }
     }

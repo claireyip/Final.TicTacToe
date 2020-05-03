@@ -3,15 +3,12 @@ package com.example.finaltictactoe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 public class GameActivity extends AppCompatActivity {
     private Button[][] buttons = new Button[3][3];
@@ -47,6 +44,7 @@ public class GameActivity extends AppCompatActivity {
                  */
                 String buttonID = "button_" + i + j;
                 int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
+                System.out.println(resID);
                 /**
                  * putting button in array
                  */
@@ -73,6 +71,7 @@ public class GameActivity extends AppCompatActivity {
                 buttonState[i][j] = 0;
             }
         }
+
     }
 
 
@@ -153,3 +152,4 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 }
+

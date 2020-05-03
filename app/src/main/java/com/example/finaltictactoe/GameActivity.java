@@ -3,12 +3,15 @@ package com.example.finaltictactoe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 public class GameActivity extends AppCompatActivity {
     private Button[][] buttons = new Button[3][3];
@@ -70,7 +73,6 @@ public class GameActivity extends AppCompatActivity {
                 buttonState[i][j] = 0;
             }
         }
-
     }
 
 
@@ -110,21 +112,23 @@ public class GameActivity extends AppCompatActivity {
         } else {
             player1Turn = true;
         }
-        if(chechForWin() == 1) {
-            player1Scores++;
+        if(checkForWin() == 1) {
+            player1Scores = player1Scores + 1;
             Toast toast = Toast.makeText(this, "Congratulations! Player 1 wins!",
                     Toast.LENGTH_LONG);
             toast.show();
+            resetWin(buttons);
             // player 1 wins and reset
-        } else if (chechForWin() == 2) {
-            player2Scores++;
+        } else if (checkForWin() == 2) {
+            player2Scores = player2Scores + 1;
             Toast toast = Toast.makeText(this, "Congratulations! Player 2 wins!",
                     Toast.LENGTH_LONG);
             toast.show();
+            resetWin(buttons);
             //player 2 win and reset
         }
     }
-    private int chechForWin() {
+    private int checkForWin() {
         for (int i = 0; i < buttonState.length; i++) {
             if (0 != buttonState[i][0] && buttonState[i][0] == buttonState[i][1]
                     && buttonState[i][0] == buttonState[i][2]) {
@@ -138,5 +142,14 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         return 0;
+    }
+    private void resetWin(Button[][] buttons) {
+        if (checkForWin() == 1 || checkForWin() == 2) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    buttons[i][j].setBackgroundColor(defaultColor);
+                }
+            }
+        }
     }
 }

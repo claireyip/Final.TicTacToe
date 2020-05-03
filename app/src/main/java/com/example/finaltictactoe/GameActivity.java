@@ -142,7 +142,14 @@ public class GameActivity extends AppCompatActivity {
         }
         return 0;
     }
+    private void updatePlayersPoints() {
+        player1.setText("Player 1: " + player1Scores);
+        player2.setText("Player 2: " + player2Scores);
+    }
     private void resetWin(Button[][] buttons) {
+        /**
+         * reset tictactoe board
+         */
         if (checkForWin() == 1 || checkForWin() == 2) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {

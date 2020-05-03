@@ -2,6 +2,8 @@ package com.example.finaltictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -28,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
     private int defaultColor = Color.parseColor("#C6C5C2");
     private int player1Color = Color.parseColor("#0DEBE4");
     private int player2Color = Color.parseColor("#EE9B2A");
+
+    private Button exitGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    private void buttonClicked (View view) {
+    private void buttonClicked(View view) {
         int b = ((Button) view).getId();
         int x = 0;
         int y = 0;
@@ -111,12 +115,13 @@ public class GameActivity extends AppCompatActivity {
         } else {
             player1Turn = true;
         }
-        if(checkForWin() == 1) {
+        if (checkForWin() == 1) {
             player1Scores = player1Scores + 1;
             Toast toast = Toast.makeText(this, "Congratulations! Player 1 wins!",
                     Toast.LENGTH_LONG);
             toast.show();
             resetWin(buttons);
+            updatePlayersPoints();
             // player 1 wins and reset
         } else if (checkForWin() == 2) {
             player2Scores = player2Scores + 1;
@@ -124,9 +129,11 @@ public class GameActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG);
             toast.show();
             resetWin(buttons);
+            updatePlayersPoints();
             //player 2 win and reset
         }
     }
+
     private int checkForWin() {
         for (int i = 0; i < buttonState.length; i++) {
             if (0 != buttonState[i][0] && buttonState[i][0] == buttonState[i][1]
@@ -142,10 +149,12 @@ public class GameActivity extends AppCompatActivity {
         }
         return 0;
     }
+
     private void updatePlayersPoints() {
         player1.setText("Player 1: " + player1Scores);
         player2.setText("Player 2: " + player2Scores);
     }
+
     private void resetWin(Button[][] buttons) {
         /**
          * reset tictactoe board

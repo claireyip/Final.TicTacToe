@@ -163,6 +163,12 @@ public class GameActivity extends AppCompatActivity {
                 return buttonState[0][j];
             }
         }
+        if (buttonState[0][0] == buttonState[1][1] && buttonState[1][1] == buttonState[2][2]) {
+            return buttonState[1][1];
+        }
+        if (buttonState[0][2] == buttonState[1][1] && buttonState[1][1] == buttonState[2][0]) {
+            return buttonState[1][1];
+        }
         return 0;
     }
 

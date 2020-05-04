@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -67,6 +68,7 @@ public class GameActivity extends AppCompatActivity {
                 /**
                  * setting listener to the onClick function
                  */
+                final MediaPlayer mp = MediaPlayer.create(this, R.raw.sample);
                 buttons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     /**
@@ -74,6 +76,7 @@ public class GameActivity extends AppCompatActivity {
                      */
                     public void onClick(View view) {
                         buttonClicked(view);
+                        mp.start();
                     }
                 });
                 /**
@@ -84,11 +87,10 @@ public class GameActivity extends AppCompatActivity {
                  * setting buttonState to 0, which means players have not clicked on the button
                  */
                 buttonState[i][j] = 0;
-
             }
         }
-
     }
+
 
     private void buttonClicked(View view) {
         int b = ((Button) view).getId();
@@ -128,7 +130,7 @@ public class GameActivity extends AppCompatActivity {
         } else {
             player1Turn = true;
         }
-        if (checkForTie() == 1) {
+        if (buttonClaimed() && checkForTie() == 0) {
             Toast toast = Toast.makeText(this, "Draw!", Toast.LENGTH_LONG);
             toast.show();
             resetWin(buttons);
@@ -150,12 +152,12 @@ public class GameActivity extends AppCompatActivity {
             updatePlayersPoints();
             //player 2 win and reset
         }
-    }
+
+}
      private void exitGameClicked(View view) {
          Intent intent2 = new Intent(GameActivity.this, MainActivity.class);
          startActivity(intent2);
      }
-
         private int checkForWin() {
         for (int i = 0; i < buttonState.length; i++) {
             if (0 != buttonState[i][0] && buttonState[i][0] == buttonState[i][1]
@@ -177,12 +179,10 @@ public class GameActivity extends AppCompatActivity {
         }
         return 0;
     }
-
     private void updatePlayersPoints() {
         player1.setText("Player 1: " + player1Scores);
         player2.setText("Player 2: " + player2Scores);
     }
-
     private int checkForTie() {
         if (checkForWin() != 1 && checkForWin() != 2) {
             for (int i = 0; i < buttonState.length; i++) {
@@ -193,18 +193,24 @@ public class GameActivity extends AppCompatActivity {
         }
         return 0;
     }
+    private boolean buttonClaimed() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (buttonState[i][j] == 0) {
+                    return false;
+                }
 
+            }
+        }
+        return true;
+    }
     private void resetWin(Button[][] buttons) {
-        /**
-         * reset tictactoe board
-         */
-        if (checkForWin() == 1 || checkForWin() == 2) {
+        if (checkForWin() == 1 || checkForWin() == 2 || checkForTie() == 0) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     GradientDrawable background = (GradientDrawable) buttons[i][j].getBackground();
                     background.setColor(defaultColor);
                     buttonState[i][j] = 0;
-
                 }
             }
         }

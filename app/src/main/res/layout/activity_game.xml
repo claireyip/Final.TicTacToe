@@ -15,7 +15,7 @@
             android:id="@+id/text_view_p1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player 1: 0"
+            android:text="Player 1: "
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="30sp" />
 
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_view_p1"
             android:layout_marginTop="6dp"
-            android:text="Player 2: 0"
+            android:text="Player 2: "
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="30sp" />
 
@@ -124,7 +124,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="94dp"
         android:layout_weight="1">
 
         <Space
@@ -166,14 +166,9 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
     <LinearLayout
         android:layout_width="358dp"
-        android:layout_height="38dp"
+        android:layout_height="16dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -187,7 +182,8 @@
             android:layout_width="139dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:text="Exit Game" />
+            android:onClick="startGame"
+            android:text="Exit/Reset Game" />
 
         <Space
             android:layout_width="29dp"

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -77,13 +78,11 @@ public class GameActivity extends AppCompatActivity {
                 /**
                  * setting color of button to default
                  */
-                buttons[i][j].setBackgroundColor(defaultColor);
+                // buttons[i][j].setBackgroundColor(defaultColor);
                 /**
                  * setting buttonState to 0, which means players have not clicked on the button
                  */
                 buttonState[i][j] = 0;
-
-
 
             }
         }
@@ -112,10 +111,12 @@ public class GameActivity extends AppCompatActivity {
 
         }
         if (player1Turn) {
-            buttons[x][y].setBackgroundColor(player1Color);
+            GradientDrawable background = (GradientDrawable) buttons[x][y].getBackground();
+            background.setColor(player1Color);
             buttonState[x][y] = 1;
         } else {
-            buttons[x][y].setBackgroundColor(player2Color);
+            GradientDrawable background = (GradientDrawable) buttons[x][y].getBackground();
+            background.setColor(player2Color);
             buttonState[x][y] = 2;
         }
         /**
@@ -177,7 +178,9 @@ public class GameActivity extends AppCompatActivity {
         if (checkForWin() == 1 || checkForWin() == 2) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    buttons[i][j].setBackgroundColor(defaultColor);
+                    GradientDrawable background = (GradientDrawable) buttons[i][j].getBackground();
+                    background.setColor(defaultColor);
+                    buttonState[i][j] = 0;
 
                 }
             }

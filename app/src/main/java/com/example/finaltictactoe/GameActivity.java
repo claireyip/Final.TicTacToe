@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +19,7 @@ public class GameActivity extends AppCompatActivity {
     /**
      * button state, determines which buttons have been set
      */
+    private Button exitGame;
     private int[][] buttonState = new int[3][3];
 
     private boolean player1Turn = true;
@@ -27,11 +30,9 @@ public class GameActivity extends AppCompatActivity {
     private TextView player1;
     private TextView player2;
 
-    private int defaultColor = Color.parseColor("#C6C5C2");
+    private int defaultColor = Color.parseColor("#FFFFFF");
     private int player1Color = Color.parseColor("#0DEBE4");
     private int player2Color = Color.parseColor("#EE9B2A");
-
-    private Button exitGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,14 @@ public class GameActivity extends AppCompatActivity {
 
         player1 = findViewById(R.id.text_view_p1);
         player2 = findViewById(R.id.text_view_p2);
+        int exitID = getResources().getIdentifier("exitGame", "id", getPackageName());
+        exitGame = findViewById(exitID);
+        exitGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitGameClicked(view);
+            }
+        });
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -73,11 +82,13 @@ public class GameActivity extends AppCompatActivity {
                  * setting buttonState to 0, which means players have not clicked on the button
                  */
                 buttonState[i][j] = 0;
+
+
+
             }
         }
 
     }
-
 
     private void buttonClicked(View view) {
         int b = ((Button) view).getId();
@@ -133,8 +144,12 @@ public class GameActivity extends AppCompatActivity {
             //player 2 win and reset
         }
     }
+     private void exitGameClicked(View view) {
+         Intent intent2 = new Intent(GameActivity.this, MainActivity.class);
+         startActivity(intent2);
+     }
 
-    private int checkForWin() {
+        private int checkForWin() {
         for (int i = 0; i < buttonState.length; i++) {
             if (0 != buttonState[i][0] && buttonState[i][0] == buttonState[i][1]
                     && buttonState[i][0] == buttonState[i][2]) {
@@ -163,6 +178,7 @@ public class GameActivity extends AppCompatActivity {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     buttons[i][j].setBackgroundColor(defaultColor);
+
                 }
             }
         }

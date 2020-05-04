@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.MediaPlayer;
 
 public class GameActivity extends AppCompatActivity {
     private Button[][] buttons = new Button[3][3];
@@ -127,6 +128,11 @@ public class GameActivity extends AppCompatActivity {
         } else {
             player1Turn = true;
         }
+        if (checkForTie() == 1) {
+            Toast toast = Toast.makeText(this, "Draw!", Toast.LENGTH_LONG);
+            toast.show();
+            resetWin(buttons);
+        }
         if (checkForWin() == 1) {
             player1Scores = player1Scores + 1;
             Toast toast = Toast.makeText(this, "Congratulations! Player 1 wins!",
@@ -175,6 +181,17 @@ public class GameActivity extends AppCompatActivity {
     private void updatePlayersPoints() {
         player1.setText("Player 1: " + player1Scores);
         player2.setText("Player 2: " + player2Scores);
+    }
+
+    private int checkForTie() {
+        if (checkForWin() != 1 && checkForWin() != 2) {
+            for (int i = 0; i < buttonState.length; i++) {
+                if (buttonState[0][i] != 0 && buttonState[1][i] != 0 && buttonState[2][i] != 0) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     private void resetWin(Button[][] buttons) {

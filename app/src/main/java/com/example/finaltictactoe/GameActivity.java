@@ -2,9 +2,12 @@ package com.example.finaltictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,16 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class GameActivity extends AppCompatActivity {
     private Button[][] buttons = new Button[3][3];
-
-    private Button exit;
-
-    private Button reset;
     /**
      * button state, determines which buttons have been set
      */
+    private Button exitGame;
     private int[][] buttonState = new int[3][3];
 
     private boolean player1Turn = true;
@@ -32,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView player1;
     private TextView player2;
 
-    private int defaultColor = Color.parseColor("#C6C5C2");
+    private int defaultColor = Color.parseColor("#FFFFFF");
     private int player1Color = Color.parseColor("#0DEBE4");
     private int player2Color = Color.parseColor("#EE9B2A");
 
@@ -43,6 +42,14 @@ public class GameActivity extends AppCompatActivity {
 
         player1 = findViewById(R.id.text_view_p1);
         player2 = findViewById(R.id.text_view_p2);
+        int exitID = getResources().getIdentifier("exitGame", "id", getPackageName());
+        exitGame = findViewById(exitID);
+        exitGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitGameClicked(view);
+            }
+        });
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -51,6 +58,7 @@ public class GameActivity extends AppCompatActivity {
                  */
                 String buttonID = "button_" + i + j;
                 int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
+                System.out.println(resID);
                 /**
                  * putting button in array
                  */
@@ -70,23 +78,18 @@ public class GameActivity extends AppCompatActivity {
                 /**
                  * setting color of button to default
                  */
-                buttons[i][j].setBackgroundColor(defaultColor);
+                // buttons[i][j].setBackgroundColor(defaultColor);
                 /**
                  * setting buttonState to 0, which means players have not clicked on the button
                  */
                 buttonState[i][j] = 0;
+
             }
         }
 
-        int exitID = getResources().getIdentifier("button_exit", "id", getPackageName());
-        exit = findViewById(exitID);
-
-        int resetID = getResources().getIdentifier("button_reset", "id", getPackageName());
-        reset = findViewById(resetID);
     }
 
-
-    private void buttonClicked (View view) {
+    private void buttonClicked(View view) {
         int b = ((Button) view).getId();
         int x = 0;
         int y = 0;
@@ -108,10 +111,12 @@ public class GameActivity extends AppCompatActivity {
 
         }
         if (player1Turn) {
-            buttons[x][y].setBackgroundColor(player1Color);
+            GradientDrawable background = (GradientDrawable) buttons[x][y].getBackground();
+            background.setColor(player1Color);
             buttonState[x][y] = 1;
         } else {
-            buttons[x][y].setBackgroundColor(player2Color);
+            GradientDrawable background = (GradientDrawable) buttons[x][y].getBackground();
+            background.setColor(player2Color);
             buttonState[x][y] = 2;
         }
         /**
@@ -122,32 +127,30 @@ public class GameActivity extends AppCompatActivity {
         } else {
             player1Turn = true;
         }
-        if (checkForTie() == 1) {
-            Toast toast = Toast.makeText(this, "Draw!", Toast.LENGTH_LONG);
-            toast.show();
-            return;
-        }
-        if(checkForWin() == 1) {
+        if (checkForWin() == 1) {
             player1Scores = player1Scores + 1;
-            String score1 = new Integer(player1Scores).toString();
             Toast toast = Toast.makeText(this, "Congratulations! Player 1 wins!",
                     Toast.LENGTH_LONG);
             toast.show();
-            updateScore("Player 1: " + score1);
-            return;
+            resetWin(buttons);
+            updatePlayersPoints();
             // player 1 wins and reset
         } else if (checkForWin() == 2) {
             player2Scores = player2Scores + 1;
-            String score2 = new Integer(player2Scores).toString();
             Toast toast = Toast.makeText(this, "Congratulations! Player 2 wins!",
                     Toast.LENGTH_LONG);
             toast.show();
-            updateScore("Player 2: " + score2);
-            return;
+            resetWin(buttons);
+            updatePlayersPoints();
             //player 2 win and reset
         }
     }
-    private int checkForWin() {
+     private void exitGameClicked(View view) {
+         Intent intent2 = new Intent(GameActivity.this, MainActivity.class);
+         startActivity(intent2);
+     }
+
+        private int checkForWin() {
         for (int i = 0; i < buttonState.length; i++) {
             if (0 != buttonState[i][0] && buttonState[i][0] == buttonState[i][1]
                     && buttonState[i][0] == buttonState[i][2]) {
@@ -160,45 +163,28 @@ public class GameActivity extends AppCompatActivity {
                 return buttonState[0][j];
             }
         }
-        if (buttonState[0][0] == buttonState[1][1] && buttonState[1][1] == buttonState[2][2]) {
-            return buttonState[1][1];
-        }
-        if (buttonState[0][2] == buttonState[1][1] && buttonState[1][1] == buttonState[2][0]) {
-            return buttonState[1][1];
-        }
         return 0;
     }
-    private int checkForTie() {
-        for (int i = 0; i < buttonState.length; i++) {
-            for (int j = 0; j < buttonState[i].length; j++) {
-                if (buttonState[i][j] != 0) {
-                    if (checkForWin() != 1 && checkForWin() != 2) {
-                        return 1;
-                    }
-                }
-            }
-        }
-        return 0;
+
+    private void updatePlayersPoints() {
+        player1.setText("Player 1: " + player1Scores);
+        player2.setText("Player 2: " + player2Scores);
     }
-    public void updateScore(String toThis) {
-        if (checkForWin() == 1) {
-            TextView p1Score = player1;
-            p1Score.setText(toThis);
-        }
-        if (checkForWin() == 2) {
-            TextView p2Score = player2;
-            p2Score.setText(toThis);
-        }
-    }
+
     private void resetWin(Button[][] buttons) {
-        if (reset.equals(true)) {
+        /**
+         * reset tictactoe board
+         */
+        if (checkForWin() == 1 || checkForWin() == 2) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    buttons[i][j].setBackgroundColor(defaultColor);
+                    GradientDrawable background = (GradientDrawable) buttons[i][j].getBackground();
+                    background.setColor(defaultColor);
+                    buttonState[i][j] = 0;
+
                 }
             }
         }
     }
-
-
 }
+
